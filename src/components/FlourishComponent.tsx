@@ -14,10 +14,32 @@ interface FlourishProps {
   loadingDelay?: number;
 }
 
+interface FlourishOptions {
+  template: string;
+  version: string;
+  container: HTMLElement;
+  api_key: string;
+  bindings: {
+    data: {
+      values: number[];
+      label: number;
+    };
+  };
+  data: {
+    data: FlourishDataPoint[];
+  };
+  state: {
+    fill_opacity: number;
+    layout: {
+      title: string;
+    };
+  };
+}
+
 declare global {
   interface Window {
     Flourish: {
-      Live: new (options: any) => any;
+      Live: new (options: FlourishOptions) => any;
     };
   }
 }
@@ -71,6 +93,10 @@ const FlourishComponent: React.FC<FlourishProps> = ({
       return null;
     }
 
+    if (!containerRef.current) {
+      return null;
+    }
+    
     // Calculate value indices (all columns after label)
     const valueIndices = Array.from(
       { length: flourishData[0].length - CONSTANTS.DATA_INDICES.VALUES_START },
