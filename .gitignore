@@ -25,3 +25,6 @@ dist-ssr
 
 # My custom stuff
 _gitignore
+
+# Local Netlify folder
+.netlify
