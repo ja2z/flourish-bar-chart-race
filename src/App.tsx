@@ -6,7 +6,7 @@ import {
   useConfig, 
   useElementColumns, 
   useElementData, 
-  useVariable 
+  //useVariable 
 } from "@sigmacomputing/plugin";
 import { debugService, LogLevel } from "./debug";
 import { FlourishDataPoint, HeaderDataPoint, BaseDataPoint } from "./types";
@@ -19,7 +19,8 @@ client.config.configureEditorPanel([
   { name: "date", type: "column", source: "sourceData", allowMultiple: false },
   { name: "value", type: "column", source: "sourceData", allowMultiple: false },
   { name: "apiKey", type: "text", secure: true },
-  { name: "fillOpacity", type: "variable" },
+  { name: "title", type: "text"  },
+//  { name: "fillOpacity", type: "variable" },
 ]);
 
 interface DataPoint {
@@ -39,7 +40,10 @@ function App() {
   const sourceData = useElementData(config.sourceData);
   const columnInfo = useElementColumns(config.sourceData);
   const apiKey = config.apiKey;
-  const fillOpacity = (useVariable(config.fillOpacity)[0]?.defaultValue as { value?: number })?.value ?? 1;
+  //const title = (client.config as any).getKey("title") as string;
+  const title = config.title;
+//  const fillOpacity = (useVariable(config.fillOpacity)[0]?.defaultValue as { value?: number })?.value ?? 1;
+debugService.debug("TITLE:", title);
 
   debugService.debug("Config:", config);
   debugService.debug("columnInfo:", columnInfo);
@@ -119,9 +123,14 @@ function App() {
           )
         ).sort();
 
+        const formatDate = (epoch: string) => {
+          const date = new Date(Number(epoch));
+          return date.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: 'numeric' });
+        };
+
         const headerRow: HeaderDataPoint = [
           "Asset Name",
-          ...uniqueDates
+          ...uniqueDates.map(formatDate)
         ];
 
         const dataRows: BaseDataPoint[] = Object.entries(groupedData).map(([label, dateValues]) => [
@@ -164,8 +173,7 @@ function App() {
     <FlourishComponent 
       flourishData={flourishData} 
       apiKey={apiKey}
-      title="Flourish Visualization" 
-      fillOpacity={fillOpacity} 
+      title={title}
       loadingDelay={100}
     />
   );

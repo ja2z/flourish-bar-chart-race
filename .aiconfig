@@ -1,0 +1,37 @@
+# Flourish Bar Chart Race Project
+
+This project implements a bar chart race visualization using Flourish.
+
+## Key Files:
+- src/components/FlourishComponent.tsx: Main component for Flourish visualization
+- src/App.tsx: Main application component
+- src/types.ts: Type definitions for the project
+
+## Project Structure:
+- src/: Source code
+- public/: Public assets
+- node_modules/: Dependencies (not tracked in git)
+
+## Coding Standards:
+- Use TypeScript for type safety
+- Follow React functional component patterns
+- Use hooks for state management
+
+## Common Tasks:
+- To add new data: Update the data source in App.tsx
+- To modify chart appearance: Adjust options in FlourishComponent.tsx
+
+## Instructions for AI:
+- When suggesting code changes, please use TypeScript syntax
+- Provide explanations for any complex logic or Flourish-specific implementations
+- If referencing Flourish API, please include links to relevant documentation
+
+## Flourish API Key:
+- The Flourish API key should be passed as a prop to the FlourishComponent
+- Never hard-code the API key in the source files
+
+## Data Format:
+- Data should be in the format expected by Flourish bar chart race visualizations
+- Typically an array of arrays, with the first array being headers
+
+For any questions about the project structure or implementation details, please refer to this file or ask for clarification.

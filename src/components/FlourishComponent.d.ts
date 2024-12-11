@@ -25,6 +25,7 @@ interface FlourishOptions {
     };
     state: {
         fill_opacity: number;
+        label_axis_width: number;
         layout: {
             title: string;
         };
