@@ -5,8 +5,8 @@ import {
   client, 
   useConfig, 
   useElementColumns, 
-  useElementData, 
-  //useVariable 
+  useElementData,
+  useVariable, 
 } from "@sigmacomputing/plugin";
 import { debugService, LogLevel } from "./debug";
 import { FlourishDataPoint, HeaderDataPoint, BaseDataPoint } from "./types";
@@ -20,7 +20,7 @@ client.config.configureEditorPanel([
   { name: "value", type: "column", source: "sourceData", allowMultiple: false },
   { name: "apiKey", type: "text", secure: true },
   { name: "title", type: "text"  },
-//  { name: "fillOpacity", type: "variable" },
+  { name: "barOpacity", type: "variable" },
 ]);
 
 interface DataPoint {
@@ -40,15 +40,13 @@ function App() {
   const sourceData = useElementData(config.sourceData);
   const columnInfo = useElementColumns(config.sourceData);
   const apiKey = config.apiKey;
-  //const title = (client.config as any).getKey("title") as string;
   const title = config.title;
-//  const fillOpacity = (useVariable(config.fillOpacity)[0]?.defaultValue as { value?: number })?.value ?? 1;
-debugService.debug("TITLE:", title);
+  const barOpacity = (useVariable(config.barOpacity)[0]?.defaultValue as { value?: number })?.value ?? 1;
 
   debugService.debug("Config:", config);
   debugService.debug("columnInfo:", columnInfo);
   debugService.debug("sourceData:", sourceData);
-  
+
   // Debug initial state
   useEffect(() => {
     debugService.debug("Data State:", {
@@ -169,11 +167,14 @@ debugService.debug("TITLE:", title);
 
   debugService.debug("flourishData", flourishData);
   
+  debugService.debug("Rendering FlourishComponent with props:", { barOpacity, apiKey, title });
+
   return (
     <FlourishComponent 
       flourishData={flourishData} 
       apiKey={apiKey}
       title={title}
+      barOpacity={barOpacity}
       loadingDelay={100}
     />
   );

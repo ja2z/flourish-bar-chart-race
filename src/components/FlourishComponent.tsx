@@ -10,7 +10,7 @@ interface FlourishProps {
   title?: string;
   template?: string;
   version?: string;
-  fillOpacity?: number;
+  barOpacity?: number;
   loadingDelay?: number;
 }
 
@@ -66,8 +66,12 @@ const FlourishComponent: React.FC<FlourishProps> = ({
   apiKey,
   template = "@flourish/bar-chart-race",
   version = "4",
+  barOpacity = 0.8,  // Add this line with a default value
   loadingDelay = CONSTANTS.INITIALIZATION_DELAY,
 }) => {
+  // Add this debug log
+  debugService.debug("FlourishComponent props:", { barOpacity, title, apiKey, template, version });
+
   const containerRef = useRef<HTMLDivElement>(null);
   const visualizationRef = useRef<any>(null);
   const initializationPromiseRef = useRef<Promise<void> | null>(null);
@@ -92,6 +96,8 @@ const FlourishComponent: React.FC<FlourishProps> = ({
   }, []);
 
   const createOptions = useCallback(() => {
+    debugService.debug("createOptions called with barOpacity:", barOpacity);
+
     if (!validateData(flourishData)) {
       debugService.warn("Invalid data structure");
       return null;
@@ -136,7 +142,7 @@ const FlourishComponent: React.FC<FlourishProps> = ({
       },
       state: {
         counter_font_size: 6,
-        bar_opacity: 0.8,
+        bar_opacity: barOpacity,  // Use the barOpacity prop here
         label_axis_width: estimatedLabelAxisWidth,
         layout: {
           title: title,  // Use the title prop here
@@ -144,7 +150,7 @@ const FlourishComponent: React.FC<FlourishProps> = ({
         },
       },
     };
-  }, [flourishData, title, apiKey, template, version, validateData]);
+  }, [flourishData, title, apiKey, template, version, validateData, barOpacity]);  // Add barOpacity to the dependency array
 
   debugService.debug("Create Options:", createOptions());
   const loadFlourishScript = useCallback(async (): Promise<void> => {
